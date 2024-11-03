@@ -6,7 +6,7 @@
 int main(int argc, char** argv)
 {   
     std::string BinPath = argv[0];
-    BinPath.erase(BinPath.find_first_of('/'), BinPath.size()-1);
+    BinPath.erase(BinPath.find_last_of('/'), BinPath.size()-1);
 
     std::string fontName = GetFontNameFromSetingsFile(BinPath);
 
