@@ -1,13 +1,23 @@
 cmake_minimum_required(VERSION 3.10)
 
-set (PROJECT_NAME my_text_editor)
+set (PROJECT_NAME Rim)
 project(${PROJECT_NAME} VERSION 0.1.0)
 
-add_executable(${PROJECT_NAME} "src/main.cpp")
+add_executable(${PROJECT_NAME} "src/main.cpp"
+							   "src/settings.h")
 
 set(SFML_DIR "external/SFML/lib/cmake/SFML")
-find_package(SFML 2.6.1 COMPONENTS network audio graphics window system REQUIRED)
-target_link_libraries(${PROJECT_NAME} sfml-network sfml-audio sfml-graphics sfml-window sfml-system)
+find_package(SFML 2.6.1 COMPONENTS graphics window system REQUIRED)
+target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 include(InstallRequiredSystemLibraries)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+					COMMAND ${CMAKE_COMMAND} -E copy_directory
+					${CMAKE_SOURCE_DIR}/fonts $<TARGET_FILE_DIR:${PROJECT_NAME}>/fonts)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+					COMMAND ${CMAKE_COMMAND} -E copy
+					${CMAKE_SOURCE_DIR}/RimSettings.txt $<TARGET_FILE_DIR:${PROJECT_NAME}>/)
