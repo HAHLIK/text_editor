@@ -1,7 +1,8 @@
+#include <SFML/Graphics.hpp>
 #include <iostream>
 #include <algorithm>
-#include <SFML/Graphics.hpp>
 #include "settings.h"
+#include "fileObject.h"
 
 int main(int argc, char** argv)
 {   
@@ -13,7 +14,7 @@ int main(int argc, char** argv)
     sf::Font ProgramFont;
     ProgramFont.loadFromFile(BinPath + "/fonts/" + fontName + ".ttf");
 
-    sf::RenderWindow window(sf::VideoMode(800, 850), "Text Editor", 
+    sf::RenderWindow window(sf::VideoMode(800, 850), "Rim", 
         sf::Style::Close | sf::Style::Resize);
     window.setVerticalSyncEnabled(true);
 
@@ -23,7 +24,7 @@ int main(int argc, char** argv)
     text.setCharacterSize(20);
 
     while (window.isOpen()) {
-    sf::Event event;
+        sf::Event event;
         while (window.pollEvent(event))
         {            
             switch (event.type)
@@ -31,11 +32,10 @@ int main(int argc, char** argv)
             case sf::Event::Closed:
                 window.close(); break;
             }
+            window.clear();
+            window.draw(text);
+            window.display();
         }
-        window.clear();
-        window.draw(text);
-        window.display();
     }
-
     return 0;
 }

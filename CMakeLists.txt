@@ -1,10 +1,13 @@
 cmake_minimum_required(VERSION 3.10)
 
 set (PROJECT_NAME Rim)
-project(${PROJECT_NAME} VERSION 0.1.0)
+project(${PROJECT_NAME} VERSION 0.1.0 LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
 
 add_executable(${PROJECT_NAME} "src/main.cpp"
-							   "src/settings.h")
+							   "src/settings.h"
+							   "src/fileObject.h"
+							   "src/fileObject.cpp")
 
 set(SFML_DIR "external/SFML/lib/cmake/SFML")
 find_package(SFML 2.6.1 COMPONENTS graphics window system REQUIRED)
