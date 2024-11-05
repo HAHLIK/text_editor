@@ -18,7 +18,10 @@ public:
     FileObject& operator= (FileObject&& other) = delete;
 
     bool init(const std::string& fileName);
+    std::string getLine(size_t n);
+    size_t getNumOfLines();
 
 private:
     std::vector<std::string> linesBuffer;
+    size_t linesBufferSize;
 };
