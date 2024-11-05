@@ -17,7 +17,7 @@ public:
     FileObject& operator= (const FileObject& other) = delete;
     FileObject& operator= (FileObject&& other) = delete;
 
-    bool init(const std::string& fileName);
+    bool init(const std::string& fileName) noexcept;
     std::string getLine(size_t n);
     size_t getNumOfLines();
 

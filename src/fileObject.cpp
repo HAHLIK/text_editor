@@ -3,25 +3,26 @@
 FileObject::FileObject() {}
 FileObject::~FileObject() {}
 
-bool FileObject::init(const std::string& fileName) 
+bool FileObject::init(const std::string& fileName) noexcept 
 {
     std::ifstream inputFile(fileName);
     if (!inputFile.is_open()) {
-        std::cerr << "Error: don't opening file";
+        std::cerr << "Error: don't opening file" << std::endl;
         return false;
     }
     std::string lineBuffer;
     while (std::getline(inputFile, lineBuffer)) {
-        linesBuffer.push_back(lineBuffer + '\n');
+        linesBuffer.push_back(lineBuffer);
     }
     linesBufferSize = linesBuffer.size();
+    inputFile.close();
     return true;
 }
 
 std::string FileObject::getLine(size_t n) 
 {   
     if (1 > n || n > linesBufferSize) {
-        std::cerr << n << " is not valid number line\n";
+        std::cerr << n << " is not valid number line" << std::endl;
         return "";
     }
     return linesBuffer[n-1];

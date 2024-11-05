@@ -4,6 +4,8 @@
 #include "settings.h"
 #include "fileObject.h"
 
+constexpr char SettingsFileName[] = "RimSettings.txt";
+
 int main(int argc, char** argv)
 {   
     std::string BinPath = argv[0];
@@ -13,7 +15,9 @@ int main(int argc, char** argv)
     if (argc >= 2) {
         openedFile.init(argv[1]);
     }
-    std::string fontName = GetFontNameFromSetingsFile(BinPath);
+    std::string fontName = GetFontNameFromSetingsFile(BinPath + "/" + SettingsFileName);
+    sf::Color bgColor(GetBgColorFromSettingsFile(BinPath + "/"+ SettingsFileName));
+    sf::Color fontColor(GetFColorFromSettingsFile(BinPath + "/"+ SettingsFileName));
 
     sf::Font ProgramFont;
     ProgramFont.loadFromFile(BinPath + "/fonts/" + fontName + ".ttf");
@@ -24,6 +28,7 @@ int main(int argc, char** argv)
 
     sf::Text text;
     text.setFont(ProgramFont);
+    text.setFillColor(fontColor);
     text.setCharacterSize(20);
 
     while (window.isOpen()) {
@@ -40,7 +45,7 @@ int main(int argc, char** argv)
                 buffer += openedFile.getLine(i);
             }
             text.setString(buffer);
-            window.clear();
+            window.clear(bgColor);
             window.draw(text);
         }
         window.display();
