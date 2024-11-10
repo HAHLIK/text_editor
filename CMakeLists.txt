@@ -7,7 +7,9 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(${PROJECT_NAME} "src/main.cpp"
 							   "src/settings.h"
 							   "src/fileObject.h"
-							   "src/fileObject.cpp")
+							   "src/fileObject.cpp"
+							   "src/editorViewer.cpp"
+							   "src/editorViewer.h")
 
 set(SFML_DIR "external/SFML/lib/cmake/SFML")
 find_package(SFML 2.6.1 COMPONENTS graphics window system REQUIRED)

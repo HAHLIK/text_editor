@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "settings.h"
 #include "fileObject.h"
+#include "editorViewer.h"
 
 constexpr char SettingsFileName[] = "RimSettings.txt";
 
@@ -22,14 +23,15 @@ int main(int argc, char** argv)
     sf::Font ProgramFont;
     ProgramFont.loadFromFile(BinPath + "/fonts/" + fontName + ".ttf");
 
-    sf::RenderWindow window(sf::VideoMode(800, 850), "Rim", 
+    sf::RenderWindow window(sf::VideoMode(800, 1000), "Rim", 
         sf::Style::Close | sf::Style::Resize | sf::Style::Titlebar);
     window.setVerticalSyncEnabled(true);
 
-    sf::Text text;
-    text.setFont(ProgramFont);
-    text.setFillColor(fontColor);
-    text.setCharacterSize(20);
+    EditorViewer editorViewer;
+    editorViewer.setFont(ProgramFont);
+    editorViewer.setBgColor(bgColor);
+    editorViewer.setFontColor(fontColor);
+    editorViewer.setFontSize(20);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -40,13 +42,7 @@ int main(int argc, char** argv)
             case sf::Event::Closed:
                 window.close(); break;
             }
-            std::string buffer;
-            for (int i = 1; i <= std::min(28, (int)openedFile.getNumOfLines()); i++) {
-                buffer += openedFile.getLine(i);
-            }
-            text.setString(buffer);
-            window.clear(bgColor);
-            window.draw(text);
+            editorViewer.draw(window, openedFile);
         }
         window.display();
     }
