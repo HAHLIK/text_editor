@@ -1,3 +1,0 @@
-font = MesloLGLDZNerdFont-Bold
-background = 3A3A3A
-font_color = FCFCFC
