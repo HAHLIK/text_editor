@@ -19,7 +19,7 @@ bool FileObject::init(const std::string& fileName) noexcept
     return true;
 }
 
-std::string FileObject::getLine(size_t n) 
+std::string FileObject::getLine(size_t n) const 
 {   
     if (1 > n || n > linesBufferSize) {
         std::cerr << n << " is not valid number line" << std::endl;
@@ -27,4 +27,4 @@ std::string FileObject::getLine(size_t n)
     }
     return linesBuffer[n-1];
 }
-size_t FileObject::getNumOfLines() { return linesBufferSize; }
+size_t FileObject::getNumOfLines() const { return linesBufferSize; }

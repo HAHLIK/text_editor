@@ -23,8 +23,7 @@ int main(int argc, char** argv)
     sf::Font ProgramFont;
     ProgramFont.loadFromFile(BinPath + "/fonts/" + fontName + ".ttf");
 
-    sf::RenderWindow window(sf::VideoMode(800, 1000), "Rim", 
-        sf::Style::Close | sf::Style::Resize | sf::Style::Titlebar);
+    sf::RenderWindow window(sf::VideoMode(800, 1000), "Rim");
     window.setVerticalSyncEnabled(true);
 
     EditorViewer editorViewer;
@@ -32,18 +31,31 @@ int main(int argc, char** argv)
     editorViewer.setBgColor(bgColor);
     editorViewer.setFontColor(fontColor);
     editorViewer.setFontSize(20);
+    editorViewer.init(window, openedFile);
 
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event))
         {            
-            switch (event.type)
+            switch (event.type)                                                                                     
             {
             case sf::Event::Closed:
                 window.close(); break;
+            case sf::Event::Resized:
+                editorViewer.setCameraBounds(event.size.width, event.size.height);
+                break;
             }
-            editorViewer.draw(window, openedFile);
+            if (event.type != sf::Event::KeyPressed) continue;
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+                editorViewer.moveDown();
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+                editorViewer.moveUp();
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                editorViewer.moveRight();
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                editorViewer.moveLeft();
         }
+        editorViewer.draw();
         window.display();
     }
     return 0;
