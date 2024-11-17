@@ -3,7 +3,6 @@
 #include "fileObject.h"
 #include "editorViewer.h"
 
-constexpr char SettingsFileName[] = "RimSettings.txt";
 
 int main(int argc, char** argv)
 {   
@@ -16,7 +15,7 @@ int main(int argc, char** argv)
     }
 
     sf::Font ProgramFont;
-    ProgramFont.loadFromFile(BinPath + "/fonts/" + FontName + ".ttf");
+    ProgramFont.loadFromFile(BinPath + "/font/" + FontName + ".ttf");
 
     sf::RenderWindow window(sf::VideoMode(800, 1000), "Rim");
     window.setVerticalSyncEnabled(true);

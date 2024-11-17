@@ -3,7 +3,7 @@
 FileObject::FileObject() {}
 FileObject::~FileObject() {}
 
-bool FileObject::init(const std::string& fileName) noexcept 
+bool FileObject::init(const std::string& fileName) noexcept
 {
     std::ifstream inputFile(fileName);
     if (!inputFile.is_open()) {

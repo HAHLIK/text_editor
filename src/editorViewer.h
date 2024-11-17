@@ -3,6 +3,8 @@
 #include <string>
 #include "fileObject.h"
 
+#define LEFT_BOARD_WIDTH 10
+
 class EditorViewer
 {
     public:
@@ -30,14 +32,18 @@ class EditorViewer
         void draw() const;
 
     private:
-        sf::RenderWindow* window;
+        void setWindowSizeInChar();
+
+        sf::RenderWindow* window = nullptr;
         const FileObject* fileObject;
 
-        int currentYPos = 1;
-        int currentXPos = 1;
+        std::pair<int, int> currentPos = std::pair<int, int>(1, 1);
+        std::pair<int, int> cursorPos = std::pair<int, int>(1, 1);
+        std::pair<int, int> windowSizeInChar;
 
         sf::Color fontColor;
         sf::Color bgColor;
         sf::Font font;
         int fontSize;
+        int lineHeight;
 };
