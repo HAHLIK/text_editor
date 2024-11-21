@@ -33,6 +33,7 @@ class EditorViewer
 
     private:
         void setWindowSizeInChar();
+        void normalizeCamera();
 
         sf::RenderWindow* window = nullptr;
         const FileObject* fileObject;
