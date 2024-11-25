@@ -16,16 +16,17 @@ void EditorViewer::init(sf::RenderWindow& window, const FileObject& fileObject)
 {
     this->window = &window;
     this->fileObject = &fileObject;
-    setWindowSizeInChar();
+    this->setWindowSizeInChar();
 }
+void EditorViewer::close() { window->close(); }
 
 void EditorViewer::setCameraBounds(int width, int height)
 {
     window->setView(sf::View(sf::FloatRect(0.f, 0.f, width, height)));
-    setWindowSizeInChar();
+    this->setWindowSizeInChar();
 }
 
-void EditorViewer::moveRight() 
+void EditorViewer::moveCursorRight() 
 {
     if (fileObject->getLine(cursorPos.second).size() >= cursorPos.first) 
         cursorPos.first++;
@@ -35,7 +36,7 @@ void EditorViewer::moveRight()
     }
     this->normalizeCamera();
 }
-void EditorViewer::moveLeft() 
+void EditorViewer::moveCursorLeft() 
 {
     if (cursorPos.first > 1) cursorPos.first--;
     else if (cursorPos.second > 1) {
@@ -44,7 +45,7 @@ void EditorViewer::moveLeft()
     }
     this->normalizeCamera();
 }
-void EditorViewer::moveDown() 
+void EditorViewer::moveCursorDown() 
 {   
     if (cursorPos.second == fileObject->getNumOfLines()) return;
     cursorPos.second++;
@@ -56,7 +57,7 @@ void EditorViewer::moveDown()
                                 cursorPos.first);
     this->normalizeCamera();
 }
-void EditorViewer::moveUp() 
+void EditorViewer::moveCursorUp() 
 {
     if (cursorPos.second == 1) return;
     cursorPos.second--;
@@ -64,6 +65,15 @@ void EditorViewer::moveUp()
     cursorPos.first = std::min((int)fileObject->getLine(cursorPos.second).size()+1,
                                 cursorPos.first);
     this->normalizeCamera();
+}
+
+void EditorViewer::scrolleUp() {
+    if (currentPos.second <= 1) return;
+    currentPos.second--; 
+}
+void EditorViewer::scrolleDown() {
+    if (currentPos.second >= fileObject->getNumOfLines() - windowSizeInChar.second) return;
+    currentPos.second++;
 }
 
 

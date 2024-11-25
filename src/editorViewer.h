@@ -17,16 +17,19 @@ class EditorViewer
         EditorViewer& operator= (EditorViewer&& other) = delete;
 
         void init(sf::RenderWindow& window, const FileObject& fileObject);
+        void close();
 
         void setFontColor(const sf::Color& color);
         void setBgColor(const sf::Color& color);
         void setFont(const sf::Font& font);
         void setFontSize(int size);
         
-        void moveRight();
-        void moveLeft();
-        void moveUp();
-        void moveDown();
+        void moveCursorRight();
+        void moveCursorLeft();
+        void moveCursorUp();
+        void moveCursorDown();
+        void scrolleUp();
+        void scrolleDown();
 
         void setCameraBounds(int width, int height);
         void draw() const;
@@ -36,7 +39,7 @@ class EditorViewer
         void normalizeCamera();
 
         sf::RenderWindow* window = nullptr;
-        const FileObject* fileObject;
+        const FileObject* fileObject = nullptr;
 
         std::pair<int, int> currentPos = std::pair<int, int>(1, 1);
         std::pair<int, int> cursorPos = std::pair<int, int>(1, 1);

@@ -2,6 +2,7 @@
 #include "settings.h"
 #include "fileObject.h"
 #include "editorViewer.h"
+#include "inputController.h"
 
 
 int main(int argc, char** argv)
@@ -27,27 +28,13 @@ int main(int argc, char** argv)
     editorViewer.setFontSize(20);
     editorViewer.init(window, openedFile);
 
+    InputController inputController(editorViewer);
+
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event))
         {            
-            switch (event.type) 
-            {
-            case sf::Event::Closed:
-                window.close(); break;
-            case sf::Event::Resized:
-                editorViewer.setCameraBounds(event.size.width, event.size.height);
-                break;
-            }
-            if (event.type != sf::Event::KeyPressed) continue;
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-                editorViewer.moveDown();
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-                editorViewer.moveUp();
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-                editorViewer.moveRight();
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-                editorViewer.moveLeft();
+            inputController.handleEvents(event);
         }
         editorViewer.draw();
         window.display();
