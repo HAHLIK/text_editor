@@ -72,7 +72,7 @@ void EditorViewer::scrolleUp() {
     currentPos.second--; 
 }
 void EditorViewer::scrolleDown() {
-    if (currentPos.second >= fileObject->getNumOfLines() - windowSizeInChar.second) return;
+    if (currentPos.second >= (int)fileObject->getNumOfLines() - windowSizeInChar.second) return;
     currentPos.second++;
 }
 
@@ -143,4 +143,20 @@ void EditorViewer::normalizeCamera()
     else if (cursorPos.second > currentPos.second + windowSizeInChar.second - 5)
         currentPos.second = std::min(cursorPos.second - windowSizeInChar.second + 5, 
             (int)fileObject->getNumOfLines() - windowSizeInChar.second);
+}
+
+void EditorViewer::normalizeCursor()
+{
+    cursorPos.first = std::max(std::min(cursorPos.first, 
+        (int)fileObject->getLine(cursorPos.second).size()), 1);
+    cursorPos.second = std::min(cursorPos.second, 
+        (int)fileObject->getNumOfLines());
+}
+
+std::pair<int, int> EditorViewer::windowCoordToDocCoord(std::pair<int, int> windowCoord)
+{
+    std::pair<int, int> docCoord;
+    docCoord.first = std::max(windowCoord.first / (fontSize / 2) - 10, 0) + currentPos.first;
+    docCoord.second = std::max(windowCoord.second / lineHeight, 0) + currentPos.second;
+    return docCoord;
 }

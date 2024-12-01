@@ -30,6 +30,13 @@ void InputController::handleMouseEvent(const sf::Event& event)
                 editorViewer->scrolleUp();
             else editorViewer->scrolleDown();
     }
+
+    if (event.type == sf::Event::MouseButtonPressed) {
+        auto mousePos = sf::Mouse::getPosition(*(editorViewer->window));
+        std::pair<int, int> mousePosI(mousePos.x, mousePos.y);
+        editorViewer->cursorPos = editorViewer->windowCoordToDocCoord(mousePosI);
+        editorViewer->normalizeCursor();
+    }
 }
 
 void InputController::handleKeyEvent(const sf::Event& event)

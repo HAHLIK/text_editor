@@ -5,6 +5,8 @@
 
 #define LEFT_BOARD_WIDTH 10
 
+class InputController;
+
 class EditorViewer
 {
     public:
@@ -34,9 +36,13 @@ class EditorViewer
         void setCameraBounds(int width, int height);
         void draw() const;
 
+        friend class InputController;
+
     private:
         void setWindowSizeInChar();
         void normalizeCamera();
+        void normalizeCursor();
+        std::pair<int, int> windowCoordToDocCoord(std::pair<int, int> windowCoord);
 
         sf::RenderWindow* window = nullptr;
         const FileObject* fileObject = nullptr;
