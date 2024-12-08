@@ -14,15 +14,15 @@ bool FileObject::init(const std::string& fileName) noexcept
         return false;
     }
     std::string lineBuffer;
-    while (std::getline(inputFile, lineBuffer)) {
-        linesBuffer.push_back(lineBuffer);
+    for (size_t i = 0; std::getline(inputFile, lineBuffer); ++i) {
+        linesBuffer[i] = lineBuffer;
     }
     linesBufferSize = linesBuffer.size();
     inputFile.close();
     return true;
 }
 
-std::string FileObject::getLine(size_t n) const 
+std::string FileObject::getLine(size_t n) const
 {   
     if (1 > n || n > linesBufferSize) {
         std::cerr << n << " is not valid number line" << std::endl;

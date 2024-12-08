@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <vector>
+#include <map>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -29,6 +29,6 @@ public:
 
 private:
     std::string fileName;
-    std::vector<std::string> linesBuffer;
+    mutable std::map<size_t, std::string> linesBuffer;
     size_t linesBufferSize;
 };
