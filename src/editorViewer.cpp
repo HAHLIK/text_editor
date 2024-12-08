@@ -7,12 +7,8 @@ EditorViewer::~EditorViewer() {}
 void EditorViewer::setFontColor(const sf::Color& color) {this->fontColor = sf::Color(color);}
 void EditorViewer::setBgColor(const sf::Color& color) {this->bgColor = sf::Color(color);}
 void EditorViewer::setFont(const sf::Font& font) {this->font = font;}
-void EditorViewer::setFontSize(int size) {
-    this->fontSize = size;
-    this-> lineHeight = fontSize * 1.5f;
-}
 
-void EditorViewer::init(sf::RenderWindow& window, const FileObject& fileObject)                                                    
+void EditorViewer::init(sf::RenderWindow& window, FileObject& fileObject)                                                    
 {
     this->window = &window;
     this->fileObject = &fileObject;
@@ -95,41 +91,62 @@ void EditorViewer::draw() const
     {
         std::string nLineString = std::to_string(nLine);
         nLineString.insert(0, LEFT_BOARD_WIDTH/2 - nLineString.size(), ' ');
+
         textBuffer.setString(nLineString);
         textBuffer.setPosition(sf::Vector2f(0.f, 
-            lineHeight * (nLine - currentPos.second)));
+            lineHeight * (nLine - currentPos.second + 1)));
         textBuffer.setFillColor(sf::Color(150, 150, 150));
+
         window->draw(textBuffer);
 
         std::string currentLine = fileObject->getLine(nLine);
         std::string bufferLine = "";
         for (int nChar = currentPos.first; nChar <= currentLine.size(); ++nChar)
             bufferLine += currentLine[nChar-1];
+
         textBuffer.setString(bufferLine);
         textBuffer.setFillColor(fontColor);
         textBuffer.setPosition(sf::Vector2f(fontSize/2 * LEFT_BOARD_WIDTH,                                                                                                                   
-            lineHeight * (nLine - currentPos.second)));
+            lineHeight * (nLine - currentPos.second + 1)));
+
         window->draw(textBuffer);
     }
 
+//Draw cursor
     sf::RectangleShape CursorRect(sf::Vector2f(fontSize/10, lineHeight));
     CursorRect.setFillColor(sf::Color::White);
     CursorRect.setPosition((cursorPos.first - currentPos.first + LEFT_BOARD_WIDTH) * fontSize/2, 
-                          (cursorPos.second - currentPos.second) * lineHeight);
+                          (cursorPos.second - currentPos.second + 1) * lineHeight);
     window->draw(CursorRect);
 
+//Draw board line
     sf::RectangleShape boardLine(sf::Vector2f(fontSize/20, window->getSize().y));
     boardLine.setFillColor(sf::Color(130, 130, 130));
     boardLine.setPosition(sf::Vector2f(fontSize/2 * (LEFT_BOARD_WIDTH - 1), 0.f));
     window->draw(boardLine);
+
+//Draw HotBar file
+    sf::RectangleShape HotBar(sf::Vector2f(sf::Vector2f(window->getSize()).x, lineHeight));
+    HotBar.setFillColor(sf::Color(52, 52, 52));
+    HotBar.setOutlineColor(sf::Color(40, 40, 40));
+    HotBar.setOutlineThickness(2);
+    HotBar.setPosition(0, 0);
+
+    textBuffer.setString("> " + fileObject->getFileName());
+    textBuffer.setCharacterSize(fontSize - 2);
+    textBuffer.setFillColor(sf::Color(190, 190, 190));
+    textBuffer.setPosition(fontSize, lineHeight/10);
+
+    window->draw(HotBar);
+    window->draw(textBuffer);
 }
 
 
 void EditorViewer::setWindowSizeInChar()
 {
     if (this->window == nullptr) return;
-    this->windowSizeInChar.first = window->getSize().x / (fontSize/2) - LEFT_BOARD_WIDTH;
-    this->windowSizeInChar.second = window->getSize().y / lineHeight;
+    this->windowSizeInChar.first = window->getSize().x / charWidth - LEFT_BOARD_WIDTH;
+    this->windowSizeInChar.second = window->getSize().y / lineHeight - 1;
 }
 
 void EditorViewer::normalizeCamera()
@@ -153,10 +170,10 @@ void EditorViewer::normalizeCursor()
         (int)fileObject->getNumOfLines());
 }
 
-std::pair<int, int> EditorViewer::windowCoordToDocCoord(std::pair<int, int> windowCoord)
+std::pair<int, int> EditorViewer::windowCoordToDocCoord(std::pair<int, int> windowCoord) const
 {
     std::pair<int, int> docCoord;
-    docCoord.first = std::max(windowCoord.first / (fontSize / 2) - 10, 0) + currentPos.first;
-    docCoord.second = std::max(windowCoord.second / lineHeight, 0) + currentPos.second;
+    docCoord.first = std::max(windowCoord.first / charWidth - 10, 0) + currentPos.first;
+    docCoord.second = std::max(windowCoord.second / lineHeight - 1, 0) + currentPos.second;
     return docCoord;
 }

@@ -1,11 +1,12 @@
 #pragma once
 
 #include "editorViewer.h"
+#include "editorContent.h"
 
 class InputController
 {
 public:
-    InputController(EditorViewer& editorViewer);
+    InputController(EditorViewer& editorViewer, EditorContent& EditorContent);
     ~InputController();
 
     InputController(const InputController& other) = delete;
@@ -15,9 +16,9 @@ public:
 
     void handleEvents(const sf::Event& events);
 
-
 private:
     EditorViewer* editorViewer = nullptr;
+    EditorContent* editorContent = nullptr;
 
     void handleConstantEvent(const sf::Event& event);
     void handleMouseEvent(const sf::Event& event);

@@ -6,6 +6,7 @@
 #define LEFT_BOARD_WIDTH 10
 
 class InputController;
+class EditorContent;
 
 class EditorViewer
 {
@@ -18,13 +19,12 @@ class EditorViewer
         EditorViewer& operator= (const EditorViewer& other) = delete;
         EditorViewer& operator= (EditorViewer&& other) = delete;
 
-        void init(sf::RenderWindow& window, const FileObject& fileObject);
+        void init(sf::RenderWindow& window, FileObject& fileObject);
         void close();
 
         void setFontColor(const sf::Color& color);
         void setBgColor(const sf::Color& color);
         void setFont(const sf::Font& font);
-        void setFontSize(int size);
         
         void moveCursorRight();
         void moveCursorLeft();
@@ -32,20 +32,22 @@ class EditorViewer
         void moveCursorDown();
         void scrolleUp();
         void scrolleDown();
+        void zoom(char zoom);
 
         void setCameraBounds(int width, int height);
         void draw() const;
 
         friend class InputController;
+        friend class EditorContent;
 
     private:
         void setWindowSizeInChar();
         void normalizeCamera();
         void normalizeCursor();
-        std::pair<int, int> windowCoordToDocCoord(std::pair<int, int> windowCoord);
+        std::pair<int, int> windowCoordToDocCoord(std::pair<int, int> windowCoord) const;
 
         sf::RenderWindow* window = nullptr;
-        const FileObject* fileObject = nullptr;
+        FileObject* fileObject = nullptr;
 
         std::pair<int, int> currentPos = std::pair<int, int>(1, 1);
         std::pair<int, int> cursorPos = std::pair<int, int>(1, 1);
@@ -54,6 +56,7 @@ class EditorViewer
         sf::Color fontColor;
         sf::Color bgColor;
         sf::Font font;
-        int fontSize;
-        int lineHeight;
+        int fontSize = 20;
+        int lineHeight = 20 * 1.5f;
+        int charWidth = 20 / 2;
 };

@@ -1,8 +1,8 @@
 #include "inputController.h"
 
 
-InputController::InputController(EditorViewer& editorViewer) : 
-    editorViewer (&editorViewer) {};
+InputController::InputController(EditorViewer& editorViewer, EditorContent& editorContent) : 
+    editorViewer (&editorViewer) , editorContent(&editorContent){}
 InputController::~InputController() {};
 
 
@@ -54,5 +54,9 @@ void InputController::handleKeyEvent(const sf::Event& event)
 
 void InputController::handleEnteredEvent(const sf::Event& event)
 {
-    
+    if (event.type != sf::Event::TextEntered) return;
+    sf::String input = event.text.unicode;
+    std::string text = input;
+    editorContent->insertTextToCursorPos(text);
+
 }

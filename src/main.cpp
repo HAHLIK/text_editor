@@ -25,10 +25,10 @@ int main(int argc, char** argv)
     editorViewer.setFont(ProgramFont);
     editorViewer.setBgColor(BgColor);
     editorViewer.setFontColor(FontColor);
-    editorViewer.setFontSize(20);
     editorViewer.init(window, openedFile);
 
-    InputController inputController(editorViewer);
+    EditorContent editorContent(editorViewer);
+    InputController inputController(editorViewer, editorContent);
 
     while (window.isOpen()) {
         sf::Event event;

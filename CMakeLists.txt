@@ -11,7 +11,10 @@ add_executable(${PROJECT_NAME} "src/main.cpp"
 							   "src/editorViewer.cpp"
 							   "src/editorViewer.h"
 							   "src/inputController.cpp"
-							   "src/inputController.h")
+							   "src/inputController.h"
+							   "src/editorContent.h"
+							   "src/editorContent.cpp")
+
 
 set(SFML_DIR "external/SFML/lib/cmake/SFML")
 find_package(SFML 2.6.1 COMPONENTS graphics window system REQUIRED)
