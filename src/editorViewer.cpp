@@ -32,6 +32,7 @@ void EditorViewer::moveCursorRight()
     }
     this->normalizeCamera();
 }
+
 void EditorViewer::moveCursorLeft() 
 {
     if (cursorPos.first > 1) cursorPos.first--;
@@ -41,23 +42,20 @@ void EditorViewer::moveCursorLeft()
     }
     this->normalizeCamera();
 }
+
 void EditorViewer::moveCursorDown() 
 {   
     if (cursorPos.second == fileObject->getNumOfLines()) return;
     cursorPos.second++;
-    if (cursorPos.second > currentPos.second + windowSizeInChar.second - 5 &&
-    (currentPos.second + windowSizeInChar.second < fileObject->getNumOfLines()))
-        currentPos.second++;
-
     cursorPos.first = std::min((int)fileObject->getLine(cursorPos.second).size()+1,
                                 cursorPos.first);
     this->normalizeCamera();
 }
+
 void EditorViewer::moveCursorUp() 
 {
     if (cursorPos.second == 1) return;
     cursorPos.second--;
-
     cursorPos.first = std::min((int)fileObject->getLine(cursorPos.second).size()+1,
                                 cursorPos.first);
     this->normalizeCamera();
@@ -67,6 +65,7 @@ void EditorViewer::scrolleUp() {
     if (currentPos.second <= 1) return;
     currentPos.second--; 
 }
+
 void EditorViewer::scrolleDown() {
     if (currentPos.second >= (int)fileObject->getNumOfLines() - windowSizeInChar.second) return;
     currentPos.second++;
@@ -77,37 +76,33 @@ void EditorViewer::draw() const
 {
     window->clear(bgColor);
 
-    int endLine = std::min(windowSizeInChar.second + currentPos.second,
-        (int)fileObject->getNumOfLines());
-
+    std::string stringBuffer;
     sf::Text textBuffer;
     textBuffer.setFont(font);
     textBuffer.setCharacterSize(fontSize);
- 
-    std::string bufferText;
-    std::string bufferNLines;
 
-    for (int nLine = currentPos.second; nLine <= endLine; ++nLine) 
+    auto startIt = fileObject->linesBuffer.begin();
+    std::advance(startIt, currentPos.second-1);
+    int endLine = std::min(windowSizeInChar.second, (int)fileObject->getNumOfLines()- currentPos.second);
+
+    int i = 0;
+    for (auto it = startIt; i <= endLine; ++i, ++it)
     {
-        std::string nLineString = std::to_string(nLine);
-        nLineString.insert(0, LEFT_BOARD_WIDTH/2 - nLineString.size(), ' ');
+        stringBuffer = std::to_string(i + currentPos.second);
+        stringBuffer.insert(0, LEFT_BOARD_WIDTH/2 - stringBuffer.size(), ' ');
 
-        textBuffer.setString(nLineString);
+        textBuffer.setString(stringBuffer);
         textBuffer.setPosition(sf::Vector2f(0.f, 
-            lineHeight * (nLine - currentPos.second + 1)));
+            lineHeight * (i + 1)));
         textBuffer.setFillColor(sf::Color(150, 150, 150));
 
         window->draw(textBuffer);
 
-        std::string currentLine = fileObject->getLine(nLine);
-        std::string bufferLine = "";
-        for (int nChar = currentPos.first; nChar <= currentLine.size(); ++nChar)
-            bufferLine += currentLine[nChar-1];
-
-        textBuffer.setString(bufferLine);
+        stringBuffer = *it;
+        textBuffer.setString(stringBuffer);
         textBuffer.setFillColor(fontColor);
         textBuffer.setPosition(sf::Vector2f(fontSize/2 * LEFT_BOARD_WIDTH,                                                                                                                   
-            lineHeight * (nLine - currentPos.second + 1)));
+            lineHeight * (i + 1)));
 
         window->draw(textBuffer);
     }
@@ -146,7 +141,8 @@ void EditorViewer::setWindowSizeInChar()
 {
     if (this->window == nullptr) return;
     this->windowSizeInChar.first = window->getSize().x / charWidth - LEFT_BOARD_WIDTH;
-    this->windowSizeInChar.second = window->getSize().y / lineHeight - 1;
+    this->windowSizeInChar.second = std::min(window->getSize().y / lineHeight - 1, 
+        (uint)fileObject->getNumOfLines());
 }
 
 void EditorViewer::normalizeCamera()
@@ -157,15 +153,15 @@ void EditorViewer::normalizeCamera()
         currentPos.first = std::max(cursorPos.first - windowSizeInChar.first + 2, 1);
     if (cursorPos.second < currentPos.second + 5)
         currentPos.second = std::max(cursorPos.second - 5, 1);
-    else if (cursorPos.second > currentPos.second + windowSizeInChar.second - 5)
-        currentPos.second = std::min(cursorPos.second - windowSizeInChar.second + 5, 
-            (int)fileObject->getNumOfLines() - windowSizeInChar.second);
+    else if (cursorPos.second > currentPos.second + windowSizeInChar.second - 5) 
+        currentPos.second = std::max(std::min(cursorPos.second - windowSizeInChar.second + 5, 
+            (int)fileObject->getNumOfLines() - windowSizeInChar.second), 1);
 }
 
 void EditorViewer::normalizeCursor()
 {
     cursorPos.first = std::max(std::min(cursorPos.first, 
-        (int)fileObject->getLine(cursorPos.second).size()), 1);
+        (int)fileObject->getLine(cursorPos.second).size() + 1), 1);
     cursorPos.second = std::min(cursorPos.second, 
         (int)fileObject->getNumOfLines());
 }

@@ -1,11 +1,12 @@
 #pragma once
 
 #include <string>
-#include <map>
+#include <list>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 
+class EditorViewer;
 
 class FileObject
 {
@@ -27,8 +28,10 @@ public:
     void removeCharBeforePos(int x, int y);
     void removeCharAfterPos(int x, int y);
 
+    friend class EditorViewer;
+
 private:
     std::string fileName;
-    mutable std::map<size_t, std::string> linesBuffer;
+    std::list<std::string> linesBuffer;
     size_t linesBufferSize;
 };
