@@ -27,6 +27,7 @@ public:
     void insertCharToPos(int x, int y, const std::string& ch);
     void removeCharBeforePos(int x, int y);
     void removeCharAfterPos(int x, int y);
+    void addLineToPos(int x, int y);
 
     friend class EditorViewer;
 

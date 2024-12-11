@@ -19,6 +19,8 @@ public:
 private:
     EditorViewer* editorViewer = nullptr;
     EditorContent* editorContent = nullptr;
+    
+    bool controlPressed = false;
 
     void handleConstantEvent(const sf::Event& event);
     void handleMouseEvent(const sf::Event& event);

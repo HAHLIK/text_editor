@@ -32,7 +32,8 @@ class EditorViewer
         void moveCursorDown();
         void scrolleUp();
         void scrolleDown();
-        void zoom(char zoom);
+        void home(bool mode = false);
+        void end(bool mode = false);
 
         void setCameraBounds(int width, int height);
         void draw() const;

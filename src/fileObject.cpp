@@ -49,20 +49,38 @@ void FileObject::insertCharToPos(int x, int y, const std::string& ch)
 
 void FileObject::removeCharBeforePos(int x, int y)
 {
-    // auto line = linesBuffer.begin();
-    // std::advance(line, y-1);
-    // if (x - 2 >= 0) {
-    //     line->erase(x-2, 1);
-    //     return;
-    // }
-    // if (y <= 1) return;
-    // (--line)->append(*(++line));
-    // linesBuffer.erase(line);
-    // linesBufferSize--;
+    auto itLine = linesBuffer.begin();
+    std::advance(itLine, y-1);
+    if (x - 2 >= 0) {
+        itLine->erase(x-2, 1);
+        return;
+    }
+    if (y <= 1) return;
+    (--itLine)->append(*(++itLine));
+    linesBuffer.erase(itLine);
+    linesBufferSize--;
 }
 
 void FileObject::removeCharAfterPos(int x, int y)
 {
-    // if (x <= linesBuffer[y-1].size())
-    //     linesBuffer[y-1].erase(x-1, 1);
+    auto itLine = linesBuffer.begin();
+    std::advance(itLine, y-1);
+    if (x <= itLine->size()) {
+        itLine->erase(x-1, 1);
+        return;
+    }
+    if (y >= linesBufferSize) return;
+    itLine->append(*(++itLine));
+    linesBuffer.erase(itLine);
+    linesBufferSize--;
+}
+
+void FileObject::addLineToPos(int x, int y)
+{
+    auto itLine = linesBuffer.begin();
+    std::advance(itLine, y-1);
+    std::string newLineString = itLine->substr(x-1, itLine->size() - x + 1);
+    itLine->erase(x-1, itLine->size() - x + 1);
+    linesBuffer.insert(++itLine, newLineString);
+    linesBufferSize++;
 }

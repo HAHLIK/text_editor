@@ -14,6 +14,7 @@ void EditorViewer::init(sf::RenderWindow& window, FileObject& fileObject)
     this->fileObject = &fileObject;
     this->setWindowSizeInChar();
 }
+
 void EditorViewer::close() { window->close(); }
 
 void EditorViewer::setCameraBounds(int width, int height)
@@ -71,6 +72,18 @@ void EditorViewer::scrolleDown() {
     currentPos.second++;
 }
 
+void EditorViewer::home(bool mode) {
+    if (mode) cursorPos.second = 1;
+    cursorPos.first = 1;
+    this->normalizeCamera();
+}
+
+void EditorViewer::end(bool mode) {
+    if (mode) cursorPos.second = fileObject->getNumOfLines();
+    cursorPos.first = fileObject->getLine(cursorPos.second).size() + 1;
+    this->normalizeCamera();
+}
+
 
 void EditorViewer::draw() const
 {
@@ -89,7 +102,7 @@ void EditorViewer::draw() const
     for (auto it = startIt; i <= endLine; ++i, ++it)
     {
         stringBuffer = std::to_string(i + currentPos.second);
-        stringBuffer.insert(0, LEFT_BOARD_WIDTH/2 - stringBuffer.size(), ' ');
+        stringBuffer.insert(0, LEFT_BOARD_WIDTH/2 - stringBuffer.size()/2, ' ');
 
         textBuffer.setString(stringBuffer);
         textBuffer.setPosition(sf::Vector2f(0.f, 
@@ -98,7 +111,9 @@ void EditorViewer::draw() const
 
         window->draw(textBuffer);
 
-        stringBuffer = *it;
+        stringBuffer = "";
+        for (int nChar = currentPos.first; nChar <= it->size(); ++nChar)
+            stringBuffer += (*it)[nChar-1];
         textBuffer.setString(stringBuffer);
         textBuffer.setFillColor(fontColor);
         textBuffer.setPosition(sf::Vector2f(fontSize/2 * LEFT_BOARD_WIDTH,                                                                                                                   

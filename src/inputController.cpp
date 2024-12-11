@@ -8,6 +8,9 @@ InputController::~InputController() {};
 
 void InputController::handleEvents(const sf::Event& event) 
 {
+    controlPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) ||
+                        sf::Keyboard::isKeyPressed(sf::Keyboard::RControl);
+
     this->handleKeyEvent(event);
     this->handleConstantEvent(event);
     this->handleMouseEvent(event);
@@ -41,7 +44,9 @@ void InputController::handleMouseEvent(const sf::Event& event)
 
 void InputController::handleKeyEvent(const sf::Event& event)
 {
-    if (event.type != sf::Event::KeyPressed) return;
+    if (event.type != sf::Event::KeyPressed && 
+        event.type!= sf::Event::KeyReleased) return;
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         editorViewer->moveCursorDown();
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
@@ -50,6 +55,11 @@ void InputController::handleKeyEvent(const sf::Event& event)
         editorViewer->moveCursorRight();
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         editorViewer->moveCursorLeft();
+
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Home))
+        editorViewer->home(controlPressed);
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::End))
+        editorViewer->end(controlPressed);
 }
 
 void InputController::handleEnteredEvent(const sf::Event& event)
@@ -57,6 +67,6 @@ void InputController::handleEnteredEvent(const sf::Event& event)
     if (event.type != sf::Event::TextEntered) return;
     sf::String input = event.text.unicode;
     std::string text = input;
-    editorContent->insertTextToCursorPos(text);
-
+    if (!controlPressed)
+        editorContent->insertTextToCursorPos(text);
 }

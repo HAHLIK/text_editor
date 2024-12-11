@@ -12,10 +12,13 @@ void EditorContent::insertTextToCursorPos(const std::string& text)
         switch (ch)
         {
         case 13:
-            cursor_y++; break;
+            editorViewer->fileObject->addLineToPos(cursor_x, cursor_y);
+            editorViewer->moveCursorDown();
+            editorViewer->home();
+            break;
         case 8: {
-            editorViewer->fileObject->removeCharBeforePos(cursor_x, cursor_y);
             editorViewer->moveCursorLeft();
+            editorViewer->fileObject->removeCharBeforePos(cursor_x, cursor_y);
             break;
         }
         case 127:
