@@ -11,9 +11,8 @@ int main(int argc, char** argv)
     BinPath.erase(BinPath.find_last_of('/'), BinPath.size()-1);
 
     FileObject openedFile;
-    if (argc >= 2) {
-        openedFile.init(argv[1]);
-    }
+    if (argc < 2 || !openedFile.init(argv[1]))
+        return 0;
 
     sf::Font ProgramFont;
     ProgramFont.loadFromFile(BinPath + "/font/" + FontName + ".ttf");

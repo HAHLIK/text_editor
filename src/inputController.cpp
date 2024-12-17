@@ -60,6 +60,9 @@ void InputController::handleKeyEvent(const sf::Event& event)
         editorViewer->home(controlPressed);
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::End))
         editorViewer->end(controlPressed);
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && controlPressed)
+        editorViewer->fileObject->save();
 }
 
 void InputController::handleEnteredEvent(const sf::Event& event)

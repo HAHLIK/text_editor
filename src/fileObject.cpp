@@ -3,12 +3,13 @@
 FileObject::FileObject() {}
 FileObject::~FileObject() {}
 
-bool FileObject::init(const std::string& fileName) noexcept
+bool FileObject::init(const std::string& filePath) noexcept
 {
-    this->fileName = fileName;
+    this->filePath = filePath;
+    this->fileName = filePath;
     this->fileName.erase(0, this->fileName.find_last_of('/') + 1);
 
-    std::ifstream inputFile(fileName);
+    std::ifstream inputFile(filePath);
     if (!inputFile.is_open()) {
         std::cerr << "Error: don't opening file" << std::endl;
         return false;
@@ -21,6 +22,21 @@ bool FileObject::init(const std::string& fileName) noexcept
     inputFile.close();
     return true;
 }
+
+bool FileObject::save() noexcept
+{
+    std::ofstream outputFile(filePath);
+    if (!outputFile.is_open()) {
+        std::cerr << "Error: don't opening file" << std::endl;
+        return false;
+    }
+    for (auto line : linesBuffer)
+        outputFile << line << '\n';
+
+    outputFile.close();
+    return true;
+}
+
 
 std::string FileObject::getLine(size_t n) const
 {   
@@ -35,10 +51,13 @@ std::string FileObject::getLine(size_t n) const
 }
 
 size_t FileObject::getNumOfLines() const { return linesBufferSize; }
-std::string FileObject::getFileName() const { return fileName; }
 
 void FileObject::insertCharToPos(int x, int y, const std::string& ch) 
 {
+    if (linesBufferSize == 0) {
+        linesBuffer.push_back("");
+        linesBufferSize++;
+    }
     auto line = linesBuffer.begin();
     std::advance(line, y-1);
     if (x-1 < line->size())

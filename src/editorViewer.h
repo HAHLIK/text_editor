@@ -49,6 +49,7 @@ class EditorViewer
 
         sf::RenderWindow* window = nullptr;
         FileObject* fileObject = nullptr;
+        bool fileSaved = false;
 
         std::pair<int, int> currentPos = std::pair<int, int>(1, 1);
         std::pair<int, int> cursorPos = std::pair<int, int>(1, 1);

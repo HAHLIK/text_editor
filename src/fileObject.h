@@ -20,9 +20,9 @@ public:
     FileObject& operator= (FileObject&& other) = delete;
 
     bool init(const std::string& fileName) noexcept;
+    bool save() noexcept;
     std::string getLine(size_t n) const;
     size_t getNumOfLines() const;
-    std::string getFileName() const;
 
     void insertCharToPos(int x, int y, const std::string& ch);
     void removeCharBeforePos(int x, int y);
@@ -33,6 +33,7 @@ public:
 
 private:
     std::string fileName;
+    std::string filePath;
     std::list<std::string> linesBuffer;
     size_t linesBufferSize;
 };

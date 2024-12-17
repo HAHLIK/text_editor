@@ -142,7 +142,7 @@ void EditorViewer::draw() const
     HotBar.setOutlineThickness(2);
     HotBar.setPosition(0, 0);
 
-    textBuffer.setString("> " + fileObject->getFileName());
+    textBuffer.setString("> " + fileObject->fileName);
     textBuffer.setCharacterSize(fontSize - 2);
     textBuffer.setFillColor(sf::Color(190, 190, 190));
     textBuffer.setPosition(fontSize, lineHeight/10);
