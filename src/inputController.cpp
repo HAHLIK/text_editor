@@ -61,8 +61,8 @@ void InputController::handleKeyEvent(const sf::Event& event)
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::End))
         editorViewer->end(controlPressed);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && controlPressed)
-        editorViewer->fileObject->save();
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && controlPressed && !editorViewer->fileSaved)
+        editorViewer->save();
 }
 
 void InputController::handleEnteredEvent(const sf::Event& event)
@@ -70,6 +70,10 @@ void InputController::handleEnteredEvent(const sf::Event& event)
     if (event.type != sf::Event::TextEntered) return;
     sf::String input = event.text.unicode;
     std::string text = input;
-    if (!controlPressed)
-        editorContent->insertTextToCursorPos(text);
+
+    if (controlPressed) 
+        return;
+        
+    editorContent->insertTextToCursorPos(text);
+    editorViewer->fileSaved = false;
 }

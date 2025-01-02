@@ -10,13 +10,18 @@ bool FileObject::init(const std::string& filePath) noexcept
     this->fileName.erase(0, this->fileName.find_last_of('/') + 1);
 
     std::ifstream inputFile(filePath);
-    if (!inputFile.is_open()) {
-        std::cerr << "Error: don't opening file" << std::endl;
+    if (!inputFile.is_open())
         return false;
-    }
     std::string lineBuffer;
-    while (std::getline(inputFile, lineBuffer)) 
+    while (std::getline(inputFile, lineBuffer)) {
+        for (int i = 0; i < lineBuffer.size(); ++i) {
+            if (lineBuffer[i] == '\t') {
+                lineBuffer.replace(i, 1, "    ");
+                i += 3;
+            }
+        }
         linesBuffer.push_back(lineBuffer);
+    }
     linesBufferSize = linesBuffer.size();
 
     inputFile.close();
@@ -25,11 +30,10 @@ bool FileObject::init(const std::string& filePath) noexcept
 
 bool FileObject::save() noexcept
 {
+    if (filePath == "") return false;
     std::ofstream outputFile(filePath);
-    if (!outputFile.is_open()) {
-        std::cerr << "Error: don't opening file" << std::endl;
+    if (!outputFile.is_open())
         return false;
-    }
     for (auto line : linesBuffer)
         outputFile << line << '\n';
 
@@ -40,10 +44,8 @@ bool FileObject::save() noexcept
 
 std::string FileObject::getLine(size_t n) const
 {   
-    if (1 > n || n > linesBufferSize) {
-        std::cerr << n << " is not valid number line" << std::endl;
+    if (1 > n || n > linesBufferSize) 
         return "";
-    }
     auto it = linesBuffer.begin();
     std::advance(it, n-1);
     std::string str = *it;
@@ -52,7 +54,7 @@ std::string FileObject::getLine(size_t n) const
 
 size_t FileObject::getNumOfLines() const { return linesBufferSize; }
 
-void FileObject::insertCharToPos(int x, int y, const std::string& ch) 
+void FileObject::insertTextToPos(int x, int y, const std::string& text) 
 {
     if (linesBufferSize == 0) {
         linesBuffer.push_back("");
@@ -61,9 +63,9 @@ void FileObject::insertCharToPos(int x, int y, const std::string& ch)
     auto line = linesBuffer.begin();
     std::advance(line, y-1);
     if (x-1 < line->size())
-        line->insert(x-1, ch);
+        line->insert(x-1, text);
     else
-        line->append(ch);
+        line->append(text);
 }
 
 void FileObject::removeCharBeforePos(int x, int y)

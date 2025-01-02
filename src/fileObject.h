@@ -3,8 +3,7 @@
 #include <string>
 #include <list>
 #include <fstream>
-#include <iostream>
-#include <sstream>
+
 
 class EditorViewer;
 
@@ -24,7 +23,7 @@ public:
     std::string getLine(size_t n) const;
     size_t getNumOfLines() const;
 
-    void insertCharToPos(int x, int y, const std::string& ch);
+    void insertTextToPos(int x, int y, const std::string& text);
     void removeCharBeforePos(int x, int y);
     void removeCharAfterPos(int x, int y);
     void addLineToPos(int x, int y);
@@ -32,8 +31,8 @@ public:
     friend class EditorViewer;
 
 private:
-    std::string fileName;
-    std::string filePath;
+    std::string fileName = "";
+    std::string filePath = "";
     std::list<std::string> linesBuffer;
-    size_t linesBufferSize;
+    size_t linesBufferSize = 0;
 };

@@ -1,4 +1,5 @@
 #include "editorViewer.h"
+#include <iostream>
 
 
 EditorViewer::EditorViewer() {}
@@ -14,7 +15,11 @@ void EditorViewer::init(sf::RenderWindow& window, FileObject& fileObject)
     this->fileObject = &fileObject;
     this->setWindowSizeInChar();
 }
-
+void EditorViewer::save() {
+    if (fileSaved) return;
+    fileObject->save();
+    fileSaved = true;
+ }
 void EditorViewer::close() { window->close(); }
 
 void EditorViewer::setCameraBounds(int width, int height)
@@ -142,9 +147,14 @@ void EditorViewer::draw() const
     HotBar.setOutlineThickness(2);
     HotBar.setPosition(0, 0);
 
-    textBuffer.setString("> " + fileObject->fileName);
+    if (fileSaved)
+        textBuffer.setString("> " + fileObject->fileName);
+    else
+        textBuffer.setString("> " + fileObject->fileName + " [E]");
+        
     textBuffer.setCharacterSize(fontSize - 2);
     textBuffer.setFillColor(sf::Color(190, 190, 190));
+
     textBuffer.setPosition(fontSize, lineHeight/10);
 
     window->draw(HotBar);
@@ -156,8 +166,7 @@ void EditorViewer::setWindowSizeInChar()
 {
     if (this->window == nullptr) return;
     this->windowSizeInChar.first = window->getSize().x / charWidth - LEFT_BOARD_WIDTH;
-    this->windowSizeInChar.second = std::min(window->getSize().y / lineHeight - 1, 
-        (uint)fileObject->getNumOfLines());
+    this->windowSizeInChar.second = window->getSize().y / lineHeight - 1;
 }
 
 void EditorViewer::normalizeCamera()
